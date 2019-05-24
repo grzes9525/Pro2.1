@@ -24,12 +24,12 @@ public class Czas {
 
     static double exponential(double lambda) {
 
-        return Math.log(1 - 0.5) / (-lambda);
+        return Math.log(1 - Math.random()) / (-lambda);
     }
 
     static double uniform(double min, double max) {
 
-        return 0.5 * (max - min) + min;
+        return Math.random() * (max - min) + min;
     }
 
 }
