@@ -1,17 +1,17 @@
 public class Czas {
 
 
-	public static double returnIntensity(double lambda) {
+	public static double return_intensity(double lambda) {
 
 		return exponential(lambda);
 	}
 
-	public static  double returnSysOn() {
+	public static  double return_sys_on() {
 
 		return exponential(1/40F);
 	}
 
-	public static  double returnSysOff() {
+	public static  double return_sys_off() {
 
 		return exponential(1/35F);
 	}

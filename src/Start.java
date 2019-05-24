@@ -9,9 +9,9 @@ public class Start {
                 double systemDelay = new Serwer().start(lambda/10D);
                 sum += systemDelay;
             }
-            double finalSystemDelay = sum / 10;
+            double final_delay = sum / 10;
 
-            System.out.println(finalSystemDelay);
+            System.out.println(final_delay);
         }
     }
 

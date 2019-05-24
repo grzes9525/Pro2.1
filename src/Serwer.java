@@ -4,86 +4,86 @@ class Serwer {
 
     private static double lambda;
     private static double czas;
-    private static double omited_tevent;
-    private static boolean is_available;
-    private static double off_time;
-    private static double sys_delay;
+    private static double pominiete_eventy;
+    private static boolean dostepny;
+    private static double czas_wylaczenia;
+    private static double opoznienie_systemu;
 
     private Lista lista;
 
     double start(double lambda) {
 
-        initialParameters(lambda);
+        create_param(lambda);
 
-        lista.addEvent(new TEvent("ON", czas));
-        lista.addEvent(new TEvent("IN", czas));
+        lista.add_event(new TEvent("ON", czas));
+        lista.add_event(new TEvent("IN", czas));
 
-        while (!lista.listIsEmpty()) {
+        while (!lista.list_is_empty()) {
 
-            TEvent event = lista.returnFirstEvent();
+            TEvent event = lista.return_first_event();
             czas = event.getTime();
-            ++Lista.events;
-            handleEvents(event);
+            ++Lista.events_count;
+            handler(event);
         }
-        double result = sys_delay / Lista.in_event;
+        double result = opoznienie_systemu / Lista.in_event_count;
         return result;
     }
 
-    private void handleEvents(TEvent event) {
+    private void handler(TEvent event) {
 
 
         if (event.getTypeEvent() == "IN") {
 
-            ++Lista.in_event;
+            ++Lista.in_event_count;
 
-            if (lista.generateEvent()) {
-                lista.addEvent(new TEvent("IN", Serwer.czas + Czas.returnIntensity(Serwer.lambda)));
-                double serviceTime = Czas.getServiceTime() + Serwer.off_time;
-                Serwer.off_time = 0;
+            if (lista.generate_event()) {
+                lista.add_event(new TEvent("IN", Serwer.czas + Czas.return_intensity(Serwer.lambda)));
+                double serviceTime = Czas.getServiceTime() + Serwer.czas_wylaczenia;
+                Serwer.czas_wylaczenia = 0;
 
-                if (Serwer.is_available) {
-                    lista.addEvent(new TEvent("OUT", Serwer.czas + serviceTime));
-                    Serwer.is_available = false;
+                if (Serwer.dostepny) {
+                    lista.add_event(new TEvent("OUT", Serwer.czas + serviceTime));
+                    Serwer.dostepny = false;
                 } else {
-                    double lastOutEventTime = Objects.isNull(lista.returnLastOutEvent()) ? 0D : lista.returnLastOutEvent().getTime();
-                    lista.addEvent(new TEvent("OUT", lastOutEventTime + serviceTime));
+                    double lastOutEventTime = Objects.isNull(lista.return_last_out_event()) ? 0D : lista.return_last_out_event().getTime();
+                    lista.add_event(new TEvent("OUT", lastOutEventTime + serviceTime));
                 }
-                if (checkList()) {
-                    Serwer.sys_delay -= event.getTime();
+                if (check_list()) {
+                    Serwer.opoznienie_systemu -= event.getTime();
                 }
             }
         } else if (event.getTypeEvent() == "OUT") {
-            if (lista.returnLastOutEvent() == null) {
+            if (lista.return_last_out_event() == null) {
 
-                Serwer.is_available = true;
+                Serwer.dostepny = true;
             }
 
-            if (checkList()) {
-                Serwer.sys_delay += event.getTime();
+            if (check_list()) {
+                Serwer.opoznienie_systemu += event.getTime();
             }
 
         } else if (event.getTypeEvent() == "OFF") {
-            Serwer.off_time = Czas.returnSysOff();
-            lista.addEvent(new TEvent("ON", Serwer.czas + Serwer.off_time));
+            Serwer.czas_wylaczenia = Czas.return_sys_off();
+            lista.add_event(new TEvent("ON", Serwer.czas + Serwer.czas_wylaczenia));
 
         }else if (event.getTypeEvent() == "ON") {
-            double systemOnTime = Czas.returnSysOn();
-            lista.addEvent(new TEvent("OFF", Serwer.czas + systemOnTime));
+            double systemOnTime = Czas.return_sys_on();
+            lista.add_event(new TEvent("OFF", Serwer.czas + systemOnTime));
         }
     }
 
-    private boolean checkList() {
+    private boolean check_list() {
 
-        return Lista.events > Lista.events_to_generation * Serwer.omited_tevent;
+        return Lista.events_count > Lista.events_to_generation * Serwer.pominiete_eventy;
     }
 
-    private void initialParameters(double lambdaValue) {
+    private void create_param(double lambdaValue) {
         lambda = lambdaValue;
-        is_available = true;
+        dostepny = true;
         czas = 0;
-        off_time = 0;
-        omited_tevent = 0.18;
-        sys_delay = 0;
-        lista = Lista.createList();
+        czas_wylaczenia = 0;
+        pominiete_eventy = 0.18;
+        opoznienie_systemu = 0;
+        lista = Lista.create_list();
     }
 }

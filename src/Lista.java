@@ -3,31 +3,31 @@ import java.util.*;
 public class Lista {
 
 	 static final int events_to_generation = 100000;
-	 static int in_event;
-	 static int events;
+	 static int in_event_count;
+	 static int events_count;
 
 
 	 List<TEvent> lista = new LinkedList<>();
 
-	static Lista createList() {
+	static Lista create_list() {
 
-		events = 0;
-		in_event = 0;
+		events_count = 0;
+		in_event_count = 0;
 		return new Lista();
 	}
 
-	boolean generateEvent() {
+	boolean generate_event() {
 
-		return events < events_to_generation;
+		return events_count < events_to_generation;
 	}
 
-	void addEvent(TEvent event) {
+	void add_event(TEvent event) {
 
         lista.add(event);
 		lista.sort(Comparator.comparing(TEvent::getTime));
 	}
 
-	TEvent returnFirstEvent() {
+	TEvent return_first_event() {
 
         TEvent event = lista.get(0);
         lista.remove(0);
@@ -35,7 +35,7 @@ public class Lista {
         return event;
 	}
 
-	TEvent returnLastOutEvent() {
+	TEvent return_last_out_event() {
 
 		return lista.stream()
 				.filter(e -> "OUT".equals(e.getTypeEvent()))
@@ -44,7 +44,7 @@ public class Lista {
                 .orElse(null);
 	}
 
-	boolean listIsEmpty() {
+	boolean list_is_empty() {
 
 		return lista.stream().noneMatch(event ->
 				"IN".equals(event.getTypeEvent()) || "OUT".equals(event.getTypeEvent()));
